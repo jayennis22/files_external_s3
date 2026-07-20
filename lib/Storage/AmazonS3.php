@@ -37,7 +37,7 @@
 
 namespace OCA\FilesExternalS3\Storage;
 
-use Aws\Handler\GuzzleV6\GuzzleHandler;
+use Aws\Handler\Guzzle\GuzzleHandler;
 use Aws\S3\Exception\S3Exception;
 use Aws\S3\S3Client;
 use DateTimeInterface;
@@ -51,7 +51,6 @@ use OCP\ITempManager;
 use Psr\Http\Message\RequestInterface;
 
 class AmazonS3 extends StorageAdapter {
-
 	/**
 	 * @var \Aws\S3\S3Client
 	 */
@@ -243,7 +242,7 @@ class AmazonS3 extends StorageAdapter {
 				// instead of the iterator, manually loop over the list ...
 				$objects = $this->getConnection()->listObjects($params);
 				/** @phan-suppress-next-line PhanDeprecatedFunction */
-				$keys = $objects->getPath('Contents/*/Key');
+				$keys = $objects->search('Contents[*].Key');
 				if (empty($keys)) {
 					continue;
 				}
